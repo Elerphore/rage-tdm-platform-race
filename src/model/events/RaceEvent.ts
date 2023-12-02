@@ -1,5 +1,6 @@
 import {ServerEvent} from "./ServerEvent";
 import { createCheckpoint } from "../../factory/checkpointFactory";
+import { createVehicle } from "../../factory/vehicleFactory";
 
 const fs = require('fs/promises')
 
@@ -16,9 +17,10 @@ export class RaceEvent extends ServerEvent {
     private async initialization() {
         this.points = await this.parseCheckPoints()
         this.startPoint = this.points[0]
-        this.movePlayersToEvent()
         this.checkpoints = this.generateCheckPoints()
         this.checkpoints[0].visible = true
+
+        this.movePlayersToEvent()
     }
     
     movePlayersToEvent() {
@@ -39,19 +41,19 @@ export class RaceEvent extends ServerEvent {
         return filePoints
     }
     
-    setPoints(_points : Vector3Mp[]) {
-        this.points = _points
+    private hidePointFromPlayers(checkpoint: CheckpointMp) {
+        checkpoint.visible = false
     }
     
-    setCheckPoints(_checkpoints : CheckpointMp[]) {
-        this.checkpoints = _checkpoints
+    private showPointForPlayers(checkpoint: CheckpointMp) {
+        checkpoint.visible = true
     }
     
-    hidePointFromPlayer(player: PlayerMp, checkpoint: CheckpointMp) {
+    private hidePointFromPlayer(player: PlayerMp, checkpoint: CheckpointMp) {
         this.checkpoints.find((point) => point.id == checkpoint.id)?.hideFor(player)
     }
-    
-    showPointForPlayer(player: PlayerMp, checkpoint: CheckpointMp) {
+
+    private showPointForPlayer(player: PlayerMp, checkpoint: CheckpointMp) {
         if(this.checkpoints.indexOf(checkpoint) != (this.checkpoints.length - 1))
             this.checkpoints[this.checkpoints.indexOf(checkpoint) + 1].showFor(player)
     }
@@ -65,4 +67,35 @@ export class RaceEvent extends ServerEvent {
         
         this.points = []
     }
+
+    racePrepare(player: PlayerMp, checkpoint: CheckpointMp) {
+        if(this.checkpoints[0].id == checkpoint.id && player.vehicle == null) {
+            const vehicle : VehicleMp = createVehicle(player.position, player.socialClub)
+            player.putIntoVehicle(vehicle, 0)
+        }
+    }
+
+    raceStart() {
+        let playersWithoutVehicle : PlayerMp[] = mp.players.toArray().filter(player => player.vehicle == null)
+
+        if(playersWithoutVehicle.length > 0) {
+            playersWithoutVehicle.forEach(player => player.outputChatBox("ВОЙТИ В АВТОМОБИЛЬ ПРИДУРОК"))
+            return;
+        }
+
+        this.hidePointFromPlayers(this.checkpoints[0])
+        this.showPointForPlayers(this.checkpoints[1])
+    }
+
+    raceProgression(player: PlayerMp, checkpoint: CheckpointMp) {
+        const index = this.checkpoints.findIndex(point => checkpoint.id == point.id)
+        if(index == 0) return;
+
+        this.hidePointFromPlayer(player, this.checkpoints[index])
+
+        if(index + 1 == this.checkpoints.length) return;
+
+        this.showPointForPlayer(player, this.checkpoints[index])
+    }
+
 }

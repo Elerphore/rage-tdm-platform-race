@@ -5,19 +5,15 @@ import {TDMEvent} from "../../model/events/TDMEvent";
 import {createVehicle} from "../../factory/vehicleFactory";
 
 mp.events.add("playerEnterVehicle", (player, vehicle, seat) => {
-    let playersWithoutVehicle : PlayerMp[] = mp.players.toArray().filter(player => player.vehicle == null)
-
-    if(playersWithoutVehicle.length > 0) {
-        playersWithoutVehicle.forEach(player => player.outputChatBox("ВОЙТИ В АВТОМОБИЛЬ ПРИДУРОК"))
-        return;
+    if(serverState.currentActiveEvent instanceof RaceEvent) {
+        serverState.currentActiveEvent.raceStart()
     }
-
-    player.outputChatBox("Все игроки в автомобиле")
 });
 
 mp.events.add("playerEnterCheckpoint", (player, checkpoint) => {
     if(serverState.currentActiveEvent instanceof RaceEvent) {
-        raceImplementation(player, checkpoint, serverState.currentActiveEvent)
+        serverState.currentActiveEvent.racePrepare(player, checkpoint)
+        serverState.currentActiveEvent.raceProgression(player, checkpoint)
     }
     if(serverState.currentActiveEvent instanceof PlatformEvent) {
         deathmatchImplementation()
@@ -29,12 +25,7 @@ mp.events.add("playerEnterCheckpoint", (player, checkpoint) => {
 
 });
 
-function raceImplementation(player: PlayerMp, checkpoint: CheckpointMp, event: RaceEvent) {
-    if(event.checkpoints[0].id == checkpoint.id && player.vehicle == null) {
-        const vehicle : VehicleMp = createVehicle(player.position, player.socialClub)
-        player.putIntoVehicle(vehicle, 0)
-    }
-}
+
 
 function deathmatchImplementation() {
     
