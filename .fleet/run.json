@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "command",
+            "name": "Run Server",
+            "program": "C:/RAGEMP/server-files/ragemp-server.exe",
+        },
+        
+    ]
+}
