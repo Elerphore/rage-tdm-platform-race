@@ -23,7 +23,10 @@ export class RaceEvent extends ServerEvent {
     
     movePlayersToEvent() {
         let pt = this.startPoint!
-        mp.players.forEach(player => player.spawn(pt))
+        mp.players.forEach(player => {
+            player.position = pt 
+            player.spawn(pt)
+        })
     }
     
     private generateCheckPoints() {
