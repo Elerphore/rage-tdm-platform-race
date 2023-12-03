@@ -1,5 +1,5 @@
-import { serverState } from "../../state/state";
-import {createEvent} from "../../factory/eventFactory";
+import { createEvent } from "../factory/eventFactory";
+import { serverState } from "../state/state";
 
 export async function startEvent(player: PlayerMp, fulltext: String, eventName: String) {
     if(serverState.currentActiveEvent != null) {

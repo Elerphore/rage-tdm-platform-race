@@ -10,10 +10,10 @@ export async function createEvent(eventName: String) {
             event = await createRaceEvent()
         break;
         case "dm":
-            console.log("no impl")
+            createDMEvent()
         break;
-            case "platform":
-                console.log("no impl")
+        case "platform":
+            createPlatformEvent()
         break;
             
     }

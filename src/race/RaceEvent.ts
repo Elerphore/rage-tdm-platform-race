@@ -1,6 +1,6 @@
-import {ServerEvent} from "./ServerEvent";
-import { createCheckpoint } from "../../factory/checkpointFactory";
-import { createVehicle } from "../../factory/vehicleFactory";
+import { createCheckpoint } from "../factory/checkpointFactory";
+import { createVehicle } from "../factory/vehicleFactory";
+import { ServerEvent } from "../model/events/ServerEvent";
 
 const fs = require('fs/promises')
 
@@ -96,6 +96,11 @@ export class RaceEvent extends ServerEvent {
         if(index + 1 == this.checkpoints.length) return;
 
         this.showPointForPlayer(player, this.checkpoints[index])
+    }
+
+    raceImplementation(player: PlayerMp, checkpoint: CheckpointMp) {
+        this.racePrepare(player, checkpoint)
+        this.raceProgression(player, checkpoint)
     }
 
 }

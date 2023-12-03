@@ -1,4 +1,3 @@
-const race = require('../../Race')
 const fs = require('fs/promises')
 
 let points : Vector3Mp[]  = []
@@ -20,7 +19,7 @@ export async function createRaceFile(player: PlayerMp, fulltext: String, userFil
 export async function spawnPoints(player: PlayerMp, fulltext: String, userFileName: String) {
     let strPoints = await fs.readFile(`races/Race ${userFileName}.json`, { encoding: 'utf8'})
     let filePoints: Vector3Mp[] = JSON.parse(strPoints)
-    
+
     filePoints.forEach(point => {
         mp.checkpoints.new(1, point, 10,
                            {
@@ -30,7 +29,7 @@ export async function spawnPoints(player: PlayerMp, fulltext: String, userFileNa
                                dimension: 0
                            });
     })
-    
+
     console.log("spawnPoints completed")
 }
 

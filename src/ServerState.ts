@@ -1,4 +1,4 @@
-import {ServerEvent} from "./events/ServerEvent";
+import { ServerEvent } from "./ServerEvent"
 
 export class ServerState {
     public currentActiveEvent: ServerEvent | null = null
