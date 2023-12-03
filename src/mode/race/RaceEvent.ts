@@ -1,12 +1,13 @@
 import { createCheckpoint } from "../../factory/checkpointFactory";
 import { createVehicle } from "../../factory/vehicleFactory";
+import { parseCheckPoints } from "../../helper/parser";
+import { movePlayersToEvent } from "../../helper/players";
 import { ServerEvent } from "../../ServerEvent";
-
-const fs = require('fs/promises')
 
 export class RaceEvent extends ServerEvent {
     points : Vector3Mp[]  = []
     checkpoints : CheckpointMp[] = []
+    startPoint : Vector3Mp | null = null
     
     public static async create() {
         let instance : RaceEvent = new RaceEvent()
@@ -15,32 +16,18 @@ export class RaceEvent extends ServerEvent {
     }
     
     private async initialization() {
-        this.points = await this.parseCheckPoints()
+        this.points = await parseCheckPoints('Race')
         this.startPoint = this.points[0]
         this.checkpoints = this.generateCheckPoints()
         this.checkpoints[0].visible = true
 
-        this.movePlayersToEvent()
-    }
-    
-    movePlayersToEvent() {
-        let pt = this.startPoint!
-        mp.players.forEach(player => {
-            player.position = pt 
-            player.spawn(pt)
-        })
+        movePlayersToEvent(this.startPoint)
     }
     
     private generateCheckPoints() {
         return this.points.map!(point => createCheckpoint(point))
     }
-    
-    private async parseCheckPoints() : Promise<Vector3Mp[]> {
-        let strPoints = await fs.readFile(`races/Race.json`, { encoding: 'utf8'})
-        let filePoints: Vector3Mp[] = JSON.parse(strPoints)
-        return filePoints
-    }
-    
+
     private hidePointFromPlayers(checkpoint: CheckpointMp) {
         checkpoint.visible = false
     }
@@ -59,8 +46,6 @@ export class RaceEvent extends ServerEvent {
     }
     
     destroyEvent() {
-        super.destroyEvent()
-        
         this.checkpoints.forEach(checkpoint => {
             checkpoint.destroy()
         })

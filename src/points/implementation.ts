@@ -12,12 +12,12 @@ export function listCoords(player: PlayerMp) {
 }
 
 export async function createRaceFile(player: PlayerMp, fulltext: String, userFileName: String) {
-    await fs.writeFile(`races/Race ${userFileName}.json`, JSON.stringify(points))
-    player.outputChatBox(`File with name: "Race ${userFileName}.json" created`)
+    await fs.writeFile(`points/${userFileName}.json`, JSON.stringify(points))
+    player.outputChatBox(`File with name: "${userFileName}.json" created`)
 }
 
 export async function spawnPoints(player: PlayerMp, fulltext: String, userFileName: String) {
-    let strPoints = await fs.readFile(`races/Race ${userFileName}.json`, { encoding: 'utf8'})
+    let strPoints = await fs.readFile(`points/${userFileName}.json`, { encoding: 'utf8'})
     let filePoints: Vector3Mp[] = JSON.parse(strPoints)
 
     filePoints.forEach(point => {

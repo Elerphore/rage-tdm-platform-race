@@ -1,34 +1,26 @@
 import { ServerEvent } from "../ServerEvent";
+import { DeathMatchEvent } from "../mode/dm/DeathMatchEvent";
+import { PlatformEvent } from "../mode/platform/PlatformEvent";
 import { RaceEvent } from "../mode/race/RaceEvent";
 
-export async function createEvent(eventName: String) {
+export async function createEvent(eventName: String) : Promise<ServerEvent | null> {
+
+    if(eventName == "race") return await createRaceEvent()
+    if(eventName == "dm") return await createDMEvent()
+    if(eventName == "platform") return await createPlatformEvent()
+
+    return null
     
-    let event: ServerEvent | null = null
-    
-    switch (eventName) {
-        case"race":
-            event = await createRaceEvent()
-        break;
-        case "dm":
-            createDMEvent()
-        break;
-        case "platform":
-            createPlatformEvent()
-        break;
-            
-    }
-    
-    return event
 }
 
 async function createRaceEvent() {
     return await RaceEvent.create()
 }
 
-function createDMEvent() {
-
+async function createDMEvent() {
+    return await DeathMatchEvent.create()
 }
 
-function createPlatformEvent() {
-
+async function createPlatformEvent() {
+    return await PlatformEvent.create()
 }

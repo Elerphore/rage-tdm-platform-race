@@ -1,4 +1,3 @@
-import {ServerState} from "../model/ServerState";
+import { ServerState } from "../ServerState";
 
 export const serverState : ServerState = new ServerState()
-
