@@ -1,5 +1,5 @@
-import {ServerEvent} from "../model/events/ServerEvent";
-import {RaceEvent} from "../model/events/RaceEvent";
+import { ServerEvent } from "../ServerEvent";
+import { RaceEvent } from "../mode/race/RaceEvent";
 
 export async function createEvent(eventName: String) {
     

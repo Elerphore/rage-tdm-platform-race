@@ -1,4 +1,4 @@
-import { serverState } from "../state/state";
+import { serverState } from "../../state/state";
 import { RaceEvent } from "./RaceEvent";
 
 mp.events.add("playerEnterVehicle", (player, vehicle, seat) => {

@@ -1,6 +1,6 @@
-import { createCheckpoint } from "../factory/checkpointFactory";
-import { createVehicle } from "../factory/vehicleFactory";
-import { ServerEvent } from "../model/events/ServerEvent";
+import { createCheckpoint } from "../../factory/checkpointFactory";
+import { createVehicle } from "../../factory/vehicleFactory";
+import { ServerEvent } from "../../ServerEvent";
 
 const fs = require('fs/promises')
 
